@@ -5,7 +5,8 @@ import json
 from requests.auth import HTTPBasicAuth
 
 
-class URLHAUS:
+class URLHAUS(CTIP):
+    pass
 
     def __init__(self):
         self.data = []
