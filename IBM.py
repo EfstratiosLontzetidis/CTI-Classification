@@ -5,7 +5,8 @@ import json
 from requests.auth import HTTPBasicAuth
 
 
-class IBM:
+class IBM(CTIP):
+    pass
 
     def __init__(self):
         self.data = []
