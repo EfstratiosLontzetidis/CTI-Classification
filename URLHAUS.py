@@ -2,7 +2,6 @@
 
 import requests
 import json
-from requests.auth import HTTPBasicAuth
 from CTIP import CTIP
 
 
@@ -10,6 +9,7 @@ class URLHAUS(CTIP):
     pass
 
     def __init__(self):
+        super().__init__()
         self.data = []
 
 
