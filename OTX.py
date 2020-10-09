@@ -5,7 +5,8 @@ import json
 from requests.auth import HTTPBasicAuth
 
 
-class OTX:
+class OTX(CTIP):
+    pass
 
     def __init__(self):
         self.data = []
