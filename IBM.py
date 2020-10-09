@@ -10,6 +10,7 @@ class IBM(CTIP):
     pass
 
     def __init__(self):
+        super().__init__()
         self.data = []
 
     # IBM API connect
