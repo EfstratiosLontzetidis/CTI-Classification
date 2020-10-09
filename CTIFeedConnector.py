@@ -16,5 +16,11 @@ def otx_api():
     return json.dumps(response.json(), indent=4, sort_keys=True)
 
 
-pulses=otx_api()
+#URLhaus API connect
+def urlhaus_api():
+    response = requests.get("https://urlhaus-api.abuse.ch/v1/payloads/recent/")
+    return json.dumps(response.json(), indent=4, sort_keys=True)
+
+#testing
+pulses=urlhaus_api()
 print(pulses)
