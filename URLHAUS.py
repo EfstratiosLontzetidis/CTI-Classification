@@ -14,6 +14,6 @@ class URLHAUS(CTIP):
 
 
     # URLhaus API connect
-    def con_api(self):
+    def api_con(self):
         response = requests.get("https://urlhaus-api.abuse.ch/v1/payloads/recent/")
         return json.dumps(response.json(), indent=4, sort_keys=True)
