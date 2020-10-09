@@ -3,6 +3,7 @@
 import requests
 import json
 from requests.auth import HTTPBasicAuth
+from CTIP import CTIP
 
 
 class IBM(CTIP):
