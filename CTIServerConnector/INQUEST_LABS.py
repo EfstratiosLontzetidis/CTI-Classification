@@ -2,18 +2,17 @@
 
 import requests
 import json
-from CTIP import CTIP
+
+from CTIServerConnector.SuperConnector import SuperConnector
 
 
-class INQUEST_LABS(CTIP):
-    pass
+class INQUEST_LABS(SuperConnector):
 
     def __init__(self):
         super().__init__()
-        self.data = []
 
 
-    # INQUEST LABS API connect
+    # INQUEST LABS get CTIPs
     def api_con(self):
         response = requests.get("https://labs.inquest.net/api/iocdb/list")
         return json.dumps(response.json(), indent=4, sort_keys=True)

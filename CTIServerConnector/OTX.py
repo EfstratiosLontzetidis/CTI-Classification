@@ -3,18 +3,16 @@
 import requests
 import json
 from requests.auth import HTTPBasicAuth
-from CTIP import CTIP
+
+from CTIServerConnector.SuperConnector import SuperConnector
 
 
-class OTX(CTIP):
-    pass
+class OTX(SuperConnector):
 
     def __init__(self):
         super().__init__()
-        self.data = []
-
     
-    # OTX API connect
+    # OTX get CTIPs
     def api_con(self):
         response = requests.get("https://otx.alienvault.com/api/v1/pulses/activity",
                                 auth=HTTPBasicAuth('34c7431b6d78523543910d7bdc04e2126849a8b583814c263ae9ef84b9ec58ca',
