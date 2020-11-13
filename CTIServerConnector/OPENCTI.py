@@ -1,4 +1,3 @@
-import json
 from pycti import OpenCTIApiClient
 
 from CTIServerConnector.SuperConnector import SuperConnector
