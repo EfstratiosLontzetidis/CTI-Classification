@@ -1,4 +1,5 @@
 from CTIServerConnector.MISP import MISP
+from CTIServerConnector.ANOMALI import ANOMALI
 from CTIServerConnector.OTX import OTX
 from CTIServerConnector.SuperConnector import SuperConnector
 from CTIServerConnector.IBM import IBM
