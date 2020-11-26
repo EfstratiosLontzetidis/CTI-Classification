@@ -5,7 +5,7 @@ import json
 from requests.auth import HTTPBasicAuth
 from CTIServerConnector.SuperConnector import SuperConnector
 
-
+#needs api id and key refresh
 class IBM(SuperConnector):
 
     def __init__(self):
