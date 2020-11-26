@@ -5,6 +5,9 @@ from CTIServerConnector.SuperConnector import SuperConnector
 from CTIServerConnector.IBM import IBM
 from CTIServerConnector.URLHAUS import URLHAUS
 from CTIServerConnector.OPENCTI import OPENCTI
+from CTIServerConnector.MRLOOQUER import MRLOOQUER
+from CTIServerConnector.PULSEDIVE import PULSEDIVE
+from CTIServerConnector.BLUELIV import BLUELIV
 from stix2validator import validate_file, print_results
 
 connector = SuperConnector()
