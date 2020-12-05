@@ -1,5 +1,5 @@
-from pycti import OpenCTIApiClient
-
+from pycti import OpenCTIApiClient, OpenCTIStix2
+import json
 from CTIServerConnector.SuperConnector import SuperConnector
 
 
@@ -17,14 +17,15 @@ class OPENCTI(SuperConnector):
 
         # OpenCTI initialization
         opencti_api_client = OpenCTIApiClient(api_url, api_token)
-        custom_attributes = """
-            id
-            name
-            published
-            description   
-        """
+        #custom_attributes = """
+            #id
+            #name
+            #published
+            #description
+        #"""
+        #data = opencti_api_client.report.list(
+               #customAttributes=custom_attributes,
+        #)
+        data = opencti_api_client.stix2.export_list("report")
 
-        data = opencti_api_client.report.list(
-               customAttributes=custom_attributes,
-            )
-        return data
+        return json.dumps(data, indent=4)
