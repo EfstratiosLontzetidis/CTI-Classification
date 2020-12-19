@@ -16,7 +16,9 @@ from CTIServerConnector.URLHAUS import URLHAUS
 # connector = SuperConnector()
 # connection_behavior = OPENCTI()
 # connector.setConnectorBehaviour(connection_behavior)
-#
+
+
+#new comment
 # ctips = connector.getCTIPs()
 from Utilities.utility import stix_to_json
 from serviceDB.mongoDBService import ClientDB
