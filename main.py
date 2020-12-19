@@ -12,7 +12,7 @@ from CTIServerConnector.SuperConnector import SuperConnector
 from CTIServerConnector.IBM import IBM
 from CTIServerConnector.URLHAUS import URLHAUS
 
-
+# this is a comment
 # connector = SuperConnector()
 # connection_behavior = OPENCTI()
 # connector.setConnectorBehaviour(connection_behavior)
