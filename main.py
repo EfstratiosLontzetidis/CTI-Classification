@@ -12,22 +12,22 @@ from CTIServerConnector.SuperConnector import SuperConnector
 from CTIServerConnector.IBM import IBM
 from CTIServerConnector.URLHAUS import URLHAUS
 
-# this is a comment
-# connector = SuperConnector()
-# connection_behavior = OPENCTI()
-# connector.setConnectorBehaviour(connection_behavior)
+connector = SuperConnector()
+connection_behavior = ANOMALI()
+connector.setConnectorBehaviour(connection_behavior)
 
-# ctips = connector.getCTIPs()
-from Utilities.utility import stix_to_json
-from serviceDB.mongoDBService import ClientDB
+ctips = connector.getCTIPs()
+print(ctips)
+#from Utilities.utility import stix_to_json
+#from serviceDB.mongoDBService import ClientDB
 
-maliciousEmailAttachmentsCollection = ClientDB.db['emailAttachment']
+#maliciousEmailAttachmentsCollection = ClientDB.db['emailAttachment']
 
 
-file_handle = open("./samples/bundle--0ad822db-6962-44a4-bc14-5f178a1dbb3f.json")
+#file_handle = open("./samples/bundle--0ad822db-6962-44a4-bc14-5f178a1dbb3f.json")
 
-anEmailSample = parse(file_handle, allow_custom=True)
+#anEmailSample = parse(file_handle, allow_custom=True)
 
 # stix2malware.insert_one(stix_to_json(regKey))
 
-maliciousEmailAttachmentsCollection.insert_one(stix_to_json(anEmailSample))
+#maliciousEmailAttachmentsCollection.insert_one(stix_to_json(anEmailSample))
