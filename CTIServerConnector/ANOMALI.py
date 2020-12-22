@@ -10,7 +10,7 @@ class ANOMALI(SuperConnector):
         super().__init__()
 
     def get_and_store_stix2(self, collection):
-        ids = re.findall('(?:"id":\s)(.*\d")', str(collection))
+        ids = re.findall('(?:"id":\s")(.*\d)', str(collection))
         return ids
 
 
@@ -26,6 +26,7 @@ class ANOMALI(SuperConnector):
         collection = api_root.collections[1]
         #make the collection in json format
         collection_json= json.dumps(collection.get_objects(), indent=4)
+        #print(collection_json)
         #take the collection's ids
         collection_ids=self.get_and_store_stix2(collection_json)
         #manual print of id is working
@@ -33,17 +34,20 @@ class ANOMALI(SuperConnector):
         for id in collection_ids:
             if "bundle" not in id:
                 #print id
-                print(id)
+                #print(id)
                 #auto print with id taken from the method is not working
-                print(collection.get_object(obj_id=id))
-                print("==================================================")
+                try:
+                    print(json.dumps(collection.get_object(obj_id=id),indent=4))
+                    print("===================================================================================")
+                except Exception:
+                    pass
 
 
 
 
 
 
-        #return json.dumps(collection.get_object(obj_id="attack-pattern--784ff1bc-1483-41fe-a172-4cd9ae25c06b"), indent=4)
+
 
 
 
