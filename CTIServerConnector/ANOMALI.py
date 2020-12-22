@@ -1,6 +1,7 @@
 from taxii2client.v20 import Server
+from serviceDB.mongoDBService import ClientDB
+from Utilities.utility import stix_to_json
 import json, re
-from stix2validator import validate_file,print_results
 from stix2 import parse
 from CTIServerConnector.SuperConnector import SuperConnector
 
@@ -9,7 +10,7 @@ class ANOMALI(SuperConnector):
     def __init__(self):
         super().__init__()
 
-    def get_and_store_stix2(self, collection):
+    def get_ids(self, collection):
         ids = re.findall('(?:"id":\s")(.*\d)', str(collection))
         return ids
 
@@ -22,22 +23,23 @@ class ANOMALI(SuperConnector):
         api_root = server.api_roots[0]
 
         server = Server("https://limo.anomali.com/api/v1/taxii2/feeds/", user="guest", password="guest")
-        #get collection
-        collection = api_root.collections[1]
+        #get collection by collection id
+        collection = api_root.collections[2]
         #make the collection in json format
         collection_json= json.dumps(collection.get_objects(), indent=4)
-        #print(collection_json)
         #take the collection's ids
-        collection_ids=self.get_and_store_stix2(collection_json)
-        #manual print of id is working
-        #print(collection.get_object(obj_id="relationship--980656e3-ba60-49ee-9ce8-cbe1a0dc65c5"))
+        collection_ids=self.get_ids(collection_json)
+        #loop in order to get CTIPs one by one
         for id in collection_ids:
             if "bundle" not in id:
-                #print id
-                #print(id)
-                #auto print with id taken from the method is not working
+                #auto pull CTIP with id taken from the method
                 try:
-                    print(json.dumps(collection.get_object(obj_id=id),indent=4))
+                    CTIP=json.dumps(collection.get_object(obj_id=id),indent=4)
+                    #print(CTIP)
+                    CTIP_parsed=parse(CTIP, allow_custom=True)
+                    Stix2Collection=ClientDB.db["CTIPsToStix2"]
+                    Stix2Collection.insert_one(stix_to_json(CTIP_parsed))
+                    print("CTIP with id: "+id+" has successfully been added to the database Stix2")
                     print("===================================================================================")
                 except Exception:
                     pass

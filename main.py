@@ -17,7 +17,7 @@ connection_behavior = ANOMALI()
 connector.setConnectorBehaviour(connection_behavior)
 
 ctips = connector.getCTIPs()
-print(ctips)
+#print(ctips)
 #from Utilities.utility import stix_to_json
 #from serviceDB.mongoDBService import ClientDB
 
@@ -27,7 +27,5 @@ print(ctips)
 #file_handle = open("./samples/bundle--0ad822db-6962-44a4-bc14-5f178a1dbb3f.json")
 
 #anEmailSample = parse(file_handle, allow_custom=True)
-
-# stix2malware.insert_one(stix_to_json(regKey))
 
 #maliciousEmailAttachmentsCollection.insert_one(stix_to_json(anEmailSample))
