@@ -13,7 +13,7 @@ from CTIServerConnector.IBM import IBM
 from CTIServerConnector.URLHAUS import URLHAUS
 
 connector = SuperConnector()
-connection_behavior = ANOMALI()
+connection_behavior = OPENCTI()
 connector.setConnectorBehaviour(connection_behavior)
 
 ctips = connector.getCTIPs()
