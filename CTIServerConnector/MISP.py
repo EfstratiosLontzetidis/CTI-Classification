@@ -13,7 +13,7 @@ class MISP(SuperConnector):
         misp_url = 'https://127.0.0.1:8443'
         misp_key = 'p9Wz6OvifEEAwkoMZoLMsC9wgONd10E3q4wxLVQ5'
         misp_verifycert = False
-
+        #run events,take uuids from each event with regex, run get_event(uuid) loop to take one by one
         misp = PyMISP(misp_url, misp_key, misp_verifycert, debug=False)
         data = misp.events()
         return (data)

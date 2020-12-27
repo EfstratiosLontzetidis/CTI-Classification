@@ -14,4 +14,4 @@ class MRLOOQUER(SuperConnector):
     # IBM get CTIPs
     def api_con(self):
         response = requests.get("https://iocfeed.mrlooquer.com/feed.json")
-        return response.json()
+        return json.dumps(response.json(), indent=4)

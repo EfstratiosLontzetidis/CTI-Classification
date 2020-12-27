@@ -13,11 +13,11 @@ from CTIServerConnector.IBM import IBM
 from CTIServerConnector.URLHAUS import URLHAUS
 
 connector = SuperConnector()
-connection_behavior = OPENCTI()
+connection_behavior = OTX()
 connector.setConnectorBehaviour(connection_behavior)
 
 ctips = connector.getCTIPs()
-#print(ctips)
+print(ctips)
 #from Utilities.utility import stix_to_json
 #from serviceDB.mongoDBService import ClientDB
 
