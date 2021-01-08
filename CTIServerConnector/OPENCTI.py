@@ -25,6 +25,7 @@ class OPENCTI(SuperConnector):
         # OpenCTI initialization
         opencti_api_client = OpenCTIApiClient(api_url, api_token)
 
+        #not tested because of opencti client is slow
 
         # Get malwares in STIX2 and place them in database
         data_malwares = opencti_api_client.stix2.export_list("malware")
