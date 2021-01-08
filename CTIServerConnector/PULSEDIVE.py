@@ -32,7 +32,7 @@ class PULSEDIVE(SuperConnector):
         return malware
 
     #not done yet
-    def indicators_and_relationships_to_stix2(self, ctip):
+    def indicators_to_stix2(self, ctip):
         return
 
     # PULSEDIVE get CTIPs
