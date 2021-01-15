@@ -2,7 +2,7 @@
 
 import requests, json
 from stix2 import Malware
-from Utilities.utility import datetimeconvertforpulsedive, portspulsedive, protocolspulsedive
+from Utilities.utility import datetimeconvertforpulsedive, portspulsedive, protocolspulsedive, technologiespulsedive
 from CTIServerConnector.SuperConnector import SuperConnector
 
 
@@ -18,6 +18,12 @@ class PULSEDIVE(SuperConnector):
         stamp_seen_datetime=datetimeconvertforpulsedive(response_json_parsed['stamp_seen'])
         stamp_added_datetime = datetimeconvertforpulsedive(response_json_parsed['stamp_added'])
         stamp_updated_datetime=datetimeconvertforpulsedive(response_json_parsed['stamp_updated'])
+        # check if technologies exist
+        try:
+            # take technologies of malware's activity
+            technologies = technologiespulsedive(response_json_parsed['summary']['attributes']['technology'])
+        except TypeError:
+            technologies = ""
         # check if protocols exist
         try:
             # take protocols of malware's activity
@@ -43,6 +49,7 @@ class PULSEDIVE(SuperConnector):
                           modified=stamp_updated_datetime,
                           risk=response_json_parsed['risk'],
                           aliases=othernames,
+                          technologies=technologies,
                           ports=ports,
                           protocols=protocols,
                           allow_custom=True,

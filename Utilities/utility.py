@@ -65,4 +65,14 @@ def protocolspulsedive(object):
         protocols.append(allstr[x].replace('"',""))
     return protocols
 
+#same for technologies
+def technologiespulsedive(object):
+    object=json.dumps(object,indent=4)
+    allstr=re.findall('(".+")', str(object))
+    technologies=[]
+    r=range(0,len(allstr),3)
+    for x in r:
+        technologies.append(allstr[x].replace('"',""))
+    return technologies
+
 
