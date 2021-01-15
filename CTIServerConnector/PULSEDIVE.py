@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
-import requests, json, re
+import requests, json
 from stix2 import Malware
+from Utilities.utility import datetimeconvertforpulsedive, portspulsedive, protocolspulsedive
 from CTIServerConnector.SuperConnector import SuperConnector
 
 
@@ -14,12 +15,26 @@ class PULSEDIVE(SuperConnector):
         #parse json
         response_json_parsed = json.loads(ctip)
         # convert datetimes of seen,added,updated to datetime objects in stix2 standard
-        stamp_seen = re.split(" ", response_json_parsed['stamp_seen'])
-        stamp_seen_datetime = stamp_seen[0] + "T" + stamp_seen[1] + "Z"
-        stamp_added = re.split(" ", response_json_parsed['stamp_added'])
-        stamp_added_datetime = stamp_added[0] + "T" + stamp_added[1] + "Z"
-        stamp_updated = re.split(" ", response_json_parsed['stamp_updated'])
-        stamp_updated_datetime = stamp_updated[0] + "T" + stamp_updated[1] + "Z"
+        stamp_seen_datetime=datetimeconvertforpulsedive(response_json_parsed['stamp_seen'])
+        stamp_added_datetime = datetimeconvertforpulsedive(response_json_parsed['stamp_added'])
+        stamp_updated_datetime=datetimeconvertforpulsedive(response_json_parsed['stamp_updated'])
+        # check if protocols exist
+        try:
+            # take protocols of malware's activity
+            protocols = protocolspulsedive(response_json_parsed['summary']['attributes']['protocol'])
+        except TypeError:
+            protocols = ""
+        # check if ports exist
+        try:
+            # take ports of malware's activity
+            ports = portspulsedive(response_json_parsed['summary']['attributes']['port'])
+        except TypeError:
+            ports = ""
+        # check if othernames exist
+        try:
+            othernames=response_json_parsed['othernames']
+        except KeyError:
+            othernames=""
         # make the malware object
         malware = Malware(name=response_json_parsed['threat'],
                           description=response_json_parsed['wikisummary'],
@@ -27,6 +42,9 @@ class PULSEDIVE(SuperConnector):
                           created=stamp_added_datetime,
                           modified=stamp_updated_datetime,
                           risk=response_json_parsed['risk'],
+                          aliases=othernames,
+                          ports=ports,
+                          protocols=protocols,
                           allow_custom=True,
                           is_family=False)
         return malware
@@ -42,6 +60,7 @@ class PULSEDIVE(SuperConnector):
         response_json=json.dumps(response.json(), indent=4, sort_keys=True)
         malware_stix2=self.threats_to_stix2(response_json)
         return malware_stix2
+
 
         #indicators by id, if they have threats, will be combined to stix2 relationship
 

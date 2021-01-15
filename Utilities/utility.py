@@ -1,6 +1,6 @@
 import json
 import datetime
-import os
+import os, re
 import puremagic
 from py_essentials import hashing as hs
 import uuid
@@ -39,3 +39,30 @@ def getuuid():
 
 def currenttime():
     return str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+
+def datetimeconvertforpulsedive(datetime):
+    splitted=re.split(" ", datetime)
+    return (splitted[0] + "T" + splitted[1] + "Z")
+
+#take the ports of malware's activity
+def portspulsedive(object):
+    #regex for taking the numbers of the collection
+    allnum=re.findall('(\d+)', str(object))
+    ports=[]
+    #taking only the ports,not the aid and indicators,loop by step=3
+    r=range(0,len(allnum),3)
+    for x in r:
+        ports.append(allnum[x])
+    return ports
+
+#same for protocols
+def protocolspulsedive(object):
+    object=json.dumps(object,indent=4)
+    allstr=re.findall('(".+")', str(object))
+    protocols=[]
+    r=range(0,len(allstr),3)
+    for x in r:
+        protocols.append(allstr[x].replace('"',""))
+    return protocols
+
+
