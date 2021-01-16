@@ -55,24 +55,16 @@ def portspulsedive(object):
         ports.append(allnum[x])
     return ports
 
-#same for protocols
-def protocolspulsedive(object):
+#same for other values
+def manyvaluespulsedive(object):
     object=json.dumps(object,indent=4)
     allstr=re.findall('(".+")', str(object))
-    protocols=[]
+    values=[]
     r=range(0,len(allstr),3)
     for x in r:
-        protocols.append(allstr[x].replace('"',""))
-    return protocols
+        values.append(allstr[x].replace('"',""))
+    return values
 
-#same for technologies
-def technologiespulsedive(object):
-    object=json.dumps(object,indent=4)
-    allstr=re.findall('(".+")', str(object))
-    technologies=[]
-    r=range(0,len(allstr),3)
-    for x in r:
-        technologies.append(allstr[x].replace('"',""))
-    return technologies
+
 
 

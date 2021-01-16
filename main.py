@@ -17,7 +17,7 @@ connection_behavior = PULSEDIVE()
 connector.setConnectorBehaviour(connection_behavior)
 
 ctips = connector.getCTIPs()
-print(ctips)
+#print(ctips)
 #from Utilities.utility import stix_to_json
 #from serviceDB.mongoDBService import ClientDB
 
