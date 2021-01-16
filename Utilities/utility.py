@@ -41,8 +41,11 @@ def currenttime():
     return str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
 def datetimeconvertforpulsedive(datetime):
-    splitted=re.split(" ", datetime)
-    return (splitted[0] + "T" + splitted[1] + "Z")
+    try:
+        splitted=re.split(" ", datetime)
+        return (splitted[0] + "T" + splitted[1] + "Z")
+    except Exception:
+        return "2021-01-15T00:48:05.000Z"
 
 #take the ports of malware's activity
 def portspulsedive(object):
