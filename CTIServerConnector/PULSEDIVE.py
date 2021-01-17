@@ -6,7 +6,6 @@ from Utilities.utility import datetimeconvertforpulsedive, portspulsedive, manyv
 from serviceDB.mongoDBService import ClientDB
 from CTIServerConnector.SuperConnector import SuperConnector
 
-
 class PULSEDIVE(SuperConnector):
 
     def __init__(self):
@@ -140,7 +139,6 @@ class PULSEDIVE(SuperConnector):
         Stix2Collection.insert_one(stix_to_json(CTIP_ioc_parsed))
         #ioc id for relationship objects
         ioc_id=CTIP_ioc_parsed.id
-
         # for relationships stix2 objects
         #check if indicator has threats
         try:
@@ -163,10 +161,6 @@ class PULSEDIVE(SuperConnector):
                     # store it in database
                     Stix2Collection.insert_one(stix_to_json(CTIP_relationship_parsed))
 
-
-
-
-
     # PULSEDIVE get CTIPs
     def api_con(self):
         #need to automate malwares
@@ -185,18 +179,9 @@ class PULSEDIVE(SuperConnector):
                 Stix2Collection = ClientDB.db["CTIPsToStix2"]
                 Stix2Collection.insert_one(stix_to_json(CTIP_parsed))
 
-
-        #need to automate indicators and relationships
         # #indicators by id, if they have threats linked, will be combined to stix2 relationship
         for y in range(300):
             response2=requests.get("https://pulsedive.com/api/info.php?iid="+str(y)+"&historical=0&schema=1&pretty=1&key=ccb008a66b43702e60bf2606826272f1a18730d718070383bb4beb17b7b6c31b")
             if response2.status_code==200:
                 response2_json = json.dumps(response2.json(), indent=4, sort_keys=True)
                 self.indicators_to_stix2(response2_json, threat_id_malware_id)
-
-
-        # #write CTIP in file for analysis
-        # file='12.json'
-        # with open(file, 'w') as outfile:
-        #     outfile.write(json.dumps(response2.json(), indent=4, sort_keys=True))
-
