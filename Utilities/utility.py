@@ -10,9 +10,9 @@ def stix_to_json(stixObject):
     return json.loads(stixObject.serialize())
 
 
-def convertCtimeToISOFormat(ctime):
-    dt = datetime.datetime.strptime(ctime, "%a %b %d %H:%M:%S %Y").isoformat()
-    return str(dt)
+def convertCtimeToISOFormatMRLooquer(ctime):
+    dt = datetime.datetime.strptime(ctime, "%m/%d/%y-%H:%M").isoformat()
+    return str(dt+"Z")
 
 
 def md5Hash(file):

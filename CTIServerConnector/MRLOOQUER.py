@@ -3,7 +3,7 @@
 import requests
 import json
 from stix2 import parse, Indicator
-from Utilities.utility import stix_to_json
+from Utilities.utility import stix_to_json, convertCtimeToISOFormatMRLooquer
 from serviceDB.mongoDBService import ClientDB
 from CTIServerConnector.SuperConnector import SuperConnector
 
@@ -28,6 +28,7 @@ class MRLOOQUER(SuperConnector):
                                 subcategory=parsed_CTIP[x]['subcategory'],
                                 categorytype=parsed_CTIP[x]['type'],
                                 domain=parsed_CTIP[x]['domain'],
+                                last_seen=convertCtimeToISOFormatMRLooquer(parsed_CTIP[x]['lastSeen']),
                                 allow_custom=True,
                                 iPv4=parsed_CTIP[x]['ip4'],
                                 iPv4ASN=parsed_CTIP[x]['ip4Asn'],
