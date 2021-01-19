@@ -2,6 +2,8 @@
 
 import requests
 import json
+from stix2 import Indicator, parse
+from serviceDB.mongoDBService import ClientDB
 
 from CTIServerConnector.SuperConnector import SuperConnector
 

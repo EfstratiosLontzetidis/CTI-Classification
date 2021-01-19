@@ -13,7 +13,7 @@ from CTIServerConnector.IBM import IBM
 from CTIServerConnector.URLHAUS import URLHAUS
 
 connector = SuperConnector()
-connection_behavior = URLHAUS()
+connection_behavior = MRLOOQUER()
 connector.setConnectorBehaviour(connection_behavior)
 
 ctips = connector.getCTIPs()
