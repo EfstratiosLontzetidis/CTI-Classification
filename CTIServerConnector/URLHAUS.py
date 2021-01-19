@@ -11,10 +11,24 @@ class URLHAUS(SuperConnector):
     def __init__(self):
         super().__init__()
 
+    def payloads_to_stix2(self):
+        response = requests.get("https://urlhaus-api.abuse.ch/v1/payloads/recent/")
+        CTIPs = json.dumps(response.json(), indent=4, sort_keys=True)
+        parsed_CTIPs = json.loads(CTIPs)
+        for x in range(len(parsed_CTIPs['payloads'])):
+            print(parsed_CTIPs['payloads'][x]['file_size'])
+            break
+
+    def urls_to_stix2(self):
+        response=requests.get("https://urlhaus-api.abuse.ch/v1/urls/recent/")
+        CTIPs = json.dumps(response.json(), indent=4, sort_keys=True)
+        parsed_CTIPs = json.loads(CTIPs)
+        for x in range(len(parsed_CTIPs['urls'])):
+            print(parsed_CTIPs['urls'][x]['id'])
+            break
+
+
     # URLhaus get CTIPs
     def api_con(self):
-        #response = requests.get("https://urlhaus-api.abuse.ch/v1/payloads/recent/limit/1")
-        #one by one, need to make regex for taking each md5_hash
-        data={'md5_hash': '12c8aec5766ac3e6f26f2505e2f4a8f2'}
-        response=requests.post(url="https://urlhaus-api.abuse.ch/v1/payload/", data=data)
-        return json.dumps(response.json(), indent=4, sort_keys=True)
+        self.payloads_to_stix2()
+        self.urls_to_stix2()
