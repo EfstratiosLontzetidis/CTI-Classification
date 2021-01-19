@@ -19,11 +19,19 @@ class MRLOOQUER(SuperConnector):
         #parse the converted json
         parsed_CTIP=json.loads(json.dumps(response.json(), indent=4))
         for x in range(len(parsed_CTIP)):
+            # check indicator type
+            if parsed_CTIP[x]['category']=="malware":
+                type_ov="malicious-activity"
+            elif parsed_CTIP[x]['category']=="fraud":
+                type_ov="anomalous-activity"
+            else:
+                type_ov="anonymization"
+
             pattern="[ipv4-addr:value = "+"'"+parsed_CTIP[x]['ip4']+"'"+" AND ipv6-addr:value = "+"'"+parsed_CTIP[x]['ip6']+"'" +"]"
-            indicator=Indicator(name="Malware Dual stack (IPv4 and IPv6 for domain: "+parsed_CTIP[x]['domain'],
+            indicator=Indicator(name="Indicators - Dual stack (IPv4 and IPv6 for domain: "+parsed_CTIP[x]['domain']+")",
                                 pattern=pattern,
                                 pattern_type="stix",
-                                category=parsed_CTIP[x]['category'],
+                                indicator_types=type_ov,
                                 subcategory=parsed_CTIP[x]['subcategory'],
                                 categorytype=parsed_CTIP[x]['type'],
                                 domain=parsed_CTIP[x]['domain'],
@@ -38,6 +46,7 @@ class MRLOOQUER(SuperConnector):
                                 iPv6ASN=parsed_CTIP[x]['ip6Asn'],
                                 iPv6NumberOfCVE=parsed_CTIP[x]['ip6NumCve'],
                                 iPv6Ports=parsed_CTIP[x]['ip6Portlist'],
+                                valid_from=convertCtimeToISOFormatMRLooquer(parsed_CTIP[x]['lastSeen'])
                                 )
             # parse the stix2 object
             CTIP_ioc_parsed = parse(indicator, allow_custom=True)

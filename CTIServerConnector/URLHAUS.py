@@ -19,6 +19,9 @@ class URLHAUS(SuperConnector):
         parsed_CTIPs = json.loads(CTIPs)
         for x in range(len(parsed_CTIPs['payloads'])):
             print(parsed_CTIPs['payloads'][x]['file_size'])
+            indicator=Indicator(
+
+            )
             break
 
     def urls_to_stix2(self):
