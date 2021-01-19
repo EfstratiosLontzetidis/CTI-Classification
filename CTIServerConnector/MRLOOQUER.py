@@ -23,7 +23,6 @@ class MRLOOQUER(SuperConnector):
             indicator=Indicator(name="Malware Dual stack (IPv4 and IPv6 for domain: "+parsed_CTIP[x]['domain'],
                                 pattern=pattern,
                                 pattern_type="stix",
-                                #created or last seen must be added and its done
                                 category=parsed_CTIP[x]['category'],
                                 subcategory=parsed_CTIP[x]['subcategory'],
                                 categorytype=parsed_CTIP[x]['type'],
