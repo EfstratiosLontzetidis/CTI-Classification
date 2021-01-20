@@ -9,6 +9,10 @@ import uuid
 def stix_to_json(stixObject):
     return json.loads(stixObject.serialize())
 
+def convertCtimeToISOFormatURLHAUS(ctime):
+    dt=re.split(" ", ctime)
+    dt=dt[0]+"T"+dt[1]+"Z"
+    return dt
 
 def convertCtimeToISOFormatMRLooquer(ctime):
     dt = datetime.datetime.strptime(ctime, "%m/%d/%y-%H:%M").isoformat()
