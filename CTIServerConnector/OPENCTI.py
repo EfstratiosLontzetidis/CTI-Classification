@@ -17,6 +17,7 @@ class OPENCTI(SuperConnector):
 
     # OpenCTI get CTIPs
     def api_con(self):
+        # not tested yet because of opencti client is slow
 
         # Variables
         api_url = "http://localhost:8080/graphql"
@@ -25,45 +26,36 @@ class OPENCTI(SuperConnector):
         # OpenCTI initialization
         opencti_api_client = OpenCTIApiClient(api_url, api_token)
 
-        #not tested because of opencti client is slow
+        #get ready database
+        Stix2Collection = ClientDB.db["CTIPsToStix2"]
+
 
         # Get malwares in STIX2 and place them in database
-        data_malwares = opencti_api_client.stix2.export_list("malware")
-        # Make the data in json format
-        data_malwares_json= json.dumps(data_malwares, indent=4)
-        print("Pulling malwares in STIX2")
-        #take malware's ids
-        malware_ids=self.get_ids(data_malwares_json)
-        #loop to get malwares one by one
-        for id in malware_ids:
-            if "bundle" not in id:
-                try:
-                    CTIP = json.dumps(opencti_api_client.stix2.export_entity(entity_id=id), indent=4)
-                    CTIP_parsed = parse(CTIP, allow_custom=True)
-                    Stix2Collection = ClientDB.db["CTIPsToStix2"]
-                    Stix2Collection.insert_one(stix_to_json(CTIP_parsed))
-                    print("CTIP with id: " + id + " has successfully been added to the database Stix2")
-                    print("===================================================================================")
-                except Exception:
-                    pass
+        try:
+            data_malwares = opencti_api_client.stix2.export_list("malware")
+            # Make the data in json format
+            data_malwares_json= json.dumps(data_malwares, indent=4)
+            data_malwares_json_parsed=json.loads(data_malwares_json)
+            for x in range(len(data_malwares_json_parsed['objects'])):
+                malware=data_malwares_json_parsed['objects'][x]
+                print(malware)
+                malware_parsed=parse(malware,allow_custom=True)
+                Stix2Collection.insert_one(stix_to_json(malware_parsed))
+        except Exception:
+            print("OpenCTI Error for malwares")
 
         # Get reports in STIX2 and place them in database
-        data_reports = opencti_api_client.stix2.export_list("report")
-        # Make the data in json format
-        data_reports_json = json.dumps(data_reports, indent=4)
-        print("Pulling reports in STIX2")
-        # take malware's ids
-        reports_ids = self.get_ids(data_reports_json)
-        # loop to get malwares one by one
-        for id in reports_ids:
-            if "bundle" not in id:
-                try:
-                    CTIP = json.dumps(opencti_api_client.stix2.export_entity(entity_id=id), indent=4)
-                    CTIP_parsed = parse(CTIP, allow_custom=True)
-                    Stix2Collection = ClientDB.db["CTIPsToStix2"]
-                    Stix2Collection.insert_one(stix_to_json(CTIP_parsed))
-                    print("CTIP with id: " + id + " has successfully been added to the database Stix2")
-                    print("===================================================================================")
-                except Exception:
-                    pass
+        try:
+            data_reports = opencti_api_client.stix2.export_list("report")
+            # Make the data in json format
+            data_reports_json = json.dumps(data_reports, indent=4)
+            data_reports_json_parsed = json.loads(data_reports_json)
+            for x in range(len(data_reports_json_parsed['objects'])):
+                report = data_reports_json_parsed['objects'][x]
+                print(report)
+                report_parsed = parse(report, allow_custom=True)
+                Stix2Collection.insert_one(stix_to_json(report_parsed))
+        except Exception:
+            print("OpenCTI Error for reports")
+
 

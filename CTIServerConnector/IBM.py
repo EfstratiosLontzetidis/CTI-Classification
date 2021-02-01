@@ -14,7 +14,7 @@ class IBM(SuperConnector):
     # IBM get CTIPs
     def api_con(self):
         #IBM will may be dropped,cause of free trial
-        response = requests.get("https://api.xforce.ibmcloud.com/xfti/mw/ipv4",
-                                auth=HTTPBasicAuth('1f783594-dbd8-4884-9fd0-2c6fcc633415',
-                                                   '83866f36-ffe7-4e5f-b931-e34307d83f82'))
-        return json.dumps(response.json(), indent=4, sort_keys=True)
+        response = requests.get("https://api.xforce.ibmcloud.com/auth/api_key",
+                                auth=HTTPBasicAuth('b8ff51dd-89d2-40f2-a289-3e0768361ea0',
+                                                   '17d90598-768e-4b6c-b03b-1d70c4475aca'),verify=False)
+        return response
