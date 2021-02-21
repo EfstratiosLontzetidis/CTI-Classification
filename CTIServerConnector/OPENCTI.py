@@ -2,7 +2,7 @@ from pycti import OpenCTIApiClient
 from serviceDB.mongoDBService import ClientDB
 from Utilities.utility import stix_to_json
 from stix2 import parse
-import json, re
+import json
 from CTIServerConnector.SuperConnector import SuperConnector
 
 
@@ -11,9 +11,6 @@ class OPENCTI(SuperConnector):
     def __init__(self):
         super().__init__()
 
-    def get_ids(self, data):
-        ids = re.findall('(?:"id":\s")(.*\d)', str(data))
-        return ids
 
     # OpenCTI get CTIPs
     def api_con(self):

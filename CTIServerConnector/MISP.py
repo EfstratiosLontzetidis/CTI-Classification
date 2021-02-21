@@ -3,7 +3,7 @@ from pymisp import PyMISP
 from Utilities.utility import stix_to_json
 from serviceDB.mongoDBService import ClientDB
 from CTIServerConnector.SuperConnector import SuperConnector
-import json
+import json, requests, sys
 
 
 class MISP(SuperConnector):
@@ -13,10 +13,10 @@ class MISP(SuperConnector):
 
     # MISP get CTIPs
     def api_con(self):
+
         misp_url = 'https://127.0.0.1:8443'
         misp_key = 'p9Wz6OvifEEAwkoMZoLMsC9wgONd10E3q4wxLVQ5'
         misp_verifycert = False
-        #run events,take uuids from each event with regex, run get_event(uuid) loop to take one by one
         misp = PyMISP(misp_url, misp_key, misp_verifycert, debug=False)
         orgs = misp.organisations(scope="all")
         orgs_json = json.dumps(orgs, indent=4, sort_keys=True)
@@ -26,4 +26,7 @@ class MISP(SuperConnector):
             print((json.dumps(events, indent=4, sort_keys=True)))
             break
 
+        # #2nd way rest api
+        # request=requests.get('https://localhost:8443//download.json', verify=False)
+        # print(request)
 
