@@ -7,15 +7,9 @@ class BLUELIV(SuperConnector):
     def __init__(self):
         super().__init__()
 
-    # IBM get CTIPs
+    # Blueliv get CTIPs
     def api_con(self):
-        #can't seperate the feeds, thus can't transform in json
-        headers = {'Authorization':'Token 35de5f77-8dec-48eb-89f2-92c7b1ee37e2'}
-        #by tags
-        #response = requests.get("https://community.blueliv.com/api/v1/tags", headers=headers)
+        headers = {'Authorization':'Token c1ddf06a-5895-4ba0-a5bc-025f8caba1e9'}
         response = requests.get("https://community.blueliv.com/api/v1/tags/MALWARE/sparks", headers=headers)
-        #by id of spark is not showing everything
-        # response = requests.get("https://community.blueliv.com/api/v1/sparks/5f8f0b8482df413eaf3440ec", headers=headers)
-        #by blueliv
-        #response = requests.get("https://community.blueliv.com/api/v1/users/Blueliv/sparks",headers=headers)
-        return response.content
+        x=json.loads(response.content.decode())
+        return json.dumps(x, indent=4)

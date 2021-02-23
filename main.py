@@ -13,9 +13,9 @@ from CTIServerConnector.IBM import IBM
 from CTIServerConnector.URLHAUS import URLHAUS
 
 connector = SuperConnector()
-connection_behavior = MISP()
+connection_behavior = BLUELIV()
 connector.setConnectorBehaviour(connection_behavior)
 
 ctips = connector.getCTIPs()
-#print(ctips)
+print(ctips)
 
