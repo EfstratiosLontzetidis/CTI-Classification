@@ -17,5 +17,5 @@ connection_behavior = BLUELIV()
 connector.setConnectorBehaviour(connection_behavior)
 
 ctips = connector.getCTIPs()
-print(ctips)
+#print(ctips)
 

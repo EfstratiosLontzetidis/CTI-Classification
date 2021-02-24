@@ -6,6 +6,12 @@ from py_essentials import hashing as hs
 import uuid
 
 
+def convertCTIMEtoISOBLUELIV(ctime):
+    dt=ctime.replace('+','Z')
+    dt=re.split('Z',dt)
+    return dt[0]+"Z"
+
+
 def stix_to_json(stixObject):
     return json.loads(stixObject.serialize())
 
