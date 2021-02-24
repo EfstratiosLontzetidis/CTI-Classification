@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-from pymisp import PyMISP
 from Utilities.utility import stix_to_json
 from serviceDB.mongoDBService import ClientDB
 from CTIServerConnector.SuperConnector import SuperConnector
