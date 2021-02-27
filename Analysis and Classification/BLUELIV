@@ -4,7 +4,7 @@ STEP 4 ANALYSIS
 
 TIMELINESS
 
-CTIPS Countdown: 130
+CTIPS Count: 130
 select count(*)
 from CTIPsToStix2;
 
@@ -51,6 +51,9 @@ Results: 13 documents out of 130 contained CVE's (10%)
 STEP 5 CLASSIFICATION
 
 5.1 Contents of Source:
+select distinct(type)
+from CTIPsToStix2
+Results: Identity,Report,Relationship
 
 Percentages of SDO's, SRO's
 In place of report can be relationship and identity
