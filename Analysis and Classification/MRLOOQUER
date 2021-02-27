@@ -43,7 +43,6 @@ from CTIPsToStix2
 Results: Indicator
 
 Percentages of SDO's
-In place of malware also infrastructure
 select count(*)
 from CTIPsToStix2
 where type = "indicator"
