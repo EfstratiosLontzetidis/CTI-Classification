@@ -68,7 +68,7 @@ from CTIPsToStix2
 where type = "indicator"
 Results: Indicators 90 (18,03%), Malwares 172 (34,46%), Relationships 237 (47,49%)
 
-Search specific SDO
+Search specific SDO,SRO
 In place of indicator also malware,indicator
 select *
 from CTIPsToStix2
