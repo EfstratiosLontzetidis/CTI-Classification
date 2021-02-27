@@ -23,7 +23,7 @@ from CTIPsToStix2
 where id like "malware%";
 
 Infrastructures: 37,5% of fields based on stix2 infrastructure sdo,
-contains: type,id,name,infrastructure_types, +custom url,url_status,host,blacklists,tags
+contains: type,id,name,infrastructure_types, +custom url,url_status,host,blacklists,tags,created_by
 missing fields: aliases, kill_chain_phases,description,first_seen,last_seen
 select *
 from CTIPsToStix2
