@@ -4,7 +4,7 @@ STEP 4 ANALYSIS
 
 TIMELINESS
 
-CTIPS Countdown: 130
+CTIPS Count: 130
 select count(*)
 from CTIPsToStix2;
 
