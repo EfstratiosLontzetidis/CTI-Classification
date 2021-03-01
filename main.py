@@ -13,7 +13,7 @@ from CTIServerConnector.IBM import IBM
 from CTIServerConnector.URLHAUS import URLHAUS
 
 connector = SuperConnector()
-connection_behavior = PULSEDIVE()
+connection_behavior = OTX()
 connector.setConnectorBehaviour(connection_behavior)
 
 ctips = connector.getCTIPs()
