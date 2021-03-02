@@ -14,6 +14,25 @@ class URLHAUS(SuperConnector):
     def __init__(self):
         super().__init__()
 
+
+    def payloads_json(self):
+        response = requests.get("https://urlhaus-api.abuse.ch/v1/payloads/recent/")
+        CTIPs = json.dumps(response.json(), indent=4, sort_keys=True)
+        parsed_CTIPs = json.loads(CTIPs)
+        Stix2Collection = ClientDB.db["URLHAUS_JSON"]
+        for x in range(len(parsed_CTIPs['payloads'])):
+            Stix2Collection.insert_one(parsed_CTIPs['payloads'][x])
+
+
+    def urls_json(self):
+        response = requests.get("https://urlhaus-api.abuse.ch/v1/urls/recent/")
+        CTIPs = json.dumps(response.json(), indent=4, sort_keys=True)
+        parsed_CTIPs = json.loads(CTIPs)
+        Stix2Collection = ClientDB.db["URLHAUS_JSON"]
+        for x in range(len(parsed_CTIPs['urls'])):
+            Stix2Collection.insert_one(parsed_CTIPs['urls'][x])
+
+
     def payloads_to_stix2_malwares(self):
         response = requests.get("https://urlhaus-api.abuse.ch/v1/payloads/recent/")
         CTIPs = json.dumps(response.json(), indent=4, sort_keys=True)
@@ -45,7 +64,7 @@ class URLHAUS(SuperConnector):
             # parse the stix2 object
             stix2_malware_parsed = parse(malware, allow_custom=True)
             # store it in db
-            Stix2Collection = ClientDB.db["CTIPsToStix2"]
+            Stix2Collection = ClientDB.db["URLHAUS_STIX2"]
             Stix2Collection.insert_one(stix_to_json(stix2_malware_parsed))
 
     def urls_to_stix2_infrastructures(self):
@@ -67,11 +86,13 @@ class URLHAUS(SuperConnector):
             # parse the stix2 object
             stix2_infrastructure_parsed = parse(infrastructure, allow_custom=True)
             #store it in db
-            Stix2Collection = ClientDB.db["CTIPsToStix2"]
+            Stix2Collection = ClientDB.db["URLHAUS_STIX2"]
             Stix2Collection.insert_one(stix_to_json(stix2_infrastructure_parsed))
 
     # URLhaus get CTIPs
     def api_con(self):
+        self.payloads_json()
+        self.urls_json()
         self.payloads_to_stix2_malwares()
         self.urls_to_stix2_infrastructures()
 

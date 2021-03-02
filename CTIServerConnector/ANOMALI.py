@@ -38,7 +38,7 @@ class ANOMALI(SuperConnector):
                     try:
                         CTIP=json.dumps(collection.get_object(obj_id=id),indent=4)
                         CTIP_parsed=parse(CTIP, allow_custom=True)
-                        Stix2Collection=ClientDB.db["CTIPsToStix2"]
+                        Stix2Collection=ClientDB.db["ANOMALI_STIX2"]
                         Stix2Collection.insert_one(stix_to_json(CTIP_parsed))
                         print("CTIP with id: "+id+" has successfully been added to the database Stix2")
                         print("===================================================================================")

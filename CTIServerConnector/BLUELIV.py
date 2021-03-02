@@ -11,6 +11,16 @@ class BLUELIV(SuperConnector):
     def __init__(self):
         super().__init__()
 
+
+    def blueliv_json_ctips(self,response):
+        x = json.loads(response.content.decode())
+        ctips = json.dumps(x, indent=4)
+        ctips_parsed = json.loads(ctips)
+        for i in range(len(ctips_parsed)):
+            if json.dumps(ctips_parsed[i]['id'], indent=4) not in spark_ids:
+                spark_ids.append(json.dumps(ctips_parsed[i]['id']))
+                NonStix2Collection.insert_one(ctips_parsed[i])
+
     def convert_ctips_to_stix2(self,response):
         x = json.loads(response.content.decode())
         ctips = json.dumps(x, indent=4)
@@ -66,7 +76,9 @@ class BLUELIV(SuperConnector):
     def api_con(self):
         # database
         global Stix2Collection
-        Stix2Collection=ClientDB.db["CTIPsToStix2"]
+        Stix2Collection=ClientDB.db["BLUELIV_STIX2"]
+        global NonStix2Collection
+        NonStix2Collection=ClientDB.db["BLUELIV_JSON"]
         headers = {'Authorization':'Token c1ddf06a-5895-4ba0-a5bc-025f8caba1e9'}
         # get all tags
         tags = requests.get("https://community.blueliv.com/api/v1/tags/", headers=headers)
@@ -79,6 +91,7 @@ class BLUELIV(SuperConnector):
         for x in range(len(name_tags)):
             response = requests.get("https://community.blueliv.com/api/v1/tags/"+name_tags[x].strip('"')+"/sparks", headers=headers)
             self.convert_ctips_to_stix2(response)
+            #self.blueliv_json_ctips(response)
 
 
 

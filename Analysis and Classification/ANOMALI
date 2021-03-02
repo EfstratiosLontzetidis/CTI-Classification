@@ -1,0 +1,99 @@
+STEP 4 ANALYSIS
+
+4.1 QUALITY EVALUATION CRITERIA
+
+TIMELINESS
+
+CTIPS Count: 8069
+select count(*)
+from ANOMALI_STIX2;
+
+In place of 2021 was checked also 2020,2019,2018,2017
+2021 CTIPS: 82 (1,01%)
+2020 CTIPS: 2960 (36,68%)
+2019 CTIPS: 1749 (21,67%)
+2018 CTIPS: 1632 (20,22%)
+2017 CTIPS: 1646 (20,39%)
+select count(*)
+from ANOMALI_STIX2
+where created like '2021%';
+
+COMPLETENESS*
+
+Relationships: 62,5% of fields based on stix2 relationship sro,
+missing  fields: start_time,stop_time,description
+contains: type,id,relationship_type,source_ref,target_ref
+select *
+from ANOMALI_STIX2
+where id like "relationship%"
+
+Identities: 50% of fields based on stix2 identity sdo
+contains: type,name,id,identity_class
+missing: roles,description,sectors,contact_info
+select *
+from ANOMALI_STIX2
+where type = "identity";
+
+Marking Definitions: 41,67% of fields based on stix2 marking definition sco
+contains: type,id,created,definition,definition_type
+missing: spec_version,name,created_by_ref,external_references,object_marking_refs,granual_markings,description
+select *
+from ANOMALI_STIX2
+where type = "marking-definition";
+
+
+4.2.1 COURSE OF ACTIONS:
+select count(*)
+from ANOMALI_STIX2
+where objects.type = "course-of-action";
+Results: 206 (2,55%)
+
+4.2.2 CPE, CVE, CAPEC :*
+Checked cpe,capec also
+select count(*)
+from ANOMALI_STIX2
+where name like "%cve%"
+Results:
+
+
+STEP 5 CLASSIFICATION
+
+5.1 Contents of Source:
+select distinct(objects.type)
+from ANOMALI_STIX2
+Results: Tool, Course of action, Intrusion set, Identity, Attack pattern, Relationship, Marking Definition, Malware, X MITRE MATRIX, X MITRE TACTIC
+
+Percentages of SDO's,SRO's,SCO'S*
+In place of identity also  Tool, Course of action, Intrusion set, Attack pattern, Relationship, Marking Definition, Malware, X MITRE MATRIX, X MITRE TACTIC
+select count(*)
+from ANOMALI_STIX2
+where objects.type = "identity"
+Results:
+
+Search specific SDO,SRO
+In place of identity also  Tool, Course of action, Intrusion set, Attack pattern, Relationship, Marking Definition, Malware, X MITRE MATRIX, X MITRE TACTIC
+select *
+from ANOMALI_STIX2
+where type = "identity"
+
+5.2 Cyber Kill Chain :*
+Kill chain phases names
+select distinct(objects.kill_chain_phases.phase_name)
+from ANOMALI_STIX2
+Results:
+
+How many CTIPs included CKC fields: 43104 (52,18%)
+select count(*)
+from ANOMALI_STIX2
+where kill_chain_phases.phase_name in ('file','Network activity','Payload installation','External analysis', 'Artifacts dropped');
+
+Search specific kill chain phase name (in place of network activity could be : file, Payload installation, Payload delivery, External analysis, Artifacts dropped)
+select *
+from ANOMALI_STIX2
+where kill_chain_phases.phase_name = 'Network activity'
+
+Percentages of kill_chain_phases:(in place of network activity could be : Network activity, Payload installation, Payload delivery, External analysis, Artifacts dropped)
+select count(*)
+from ANOMALI_STIX2
+where kill_chain_phases.phase_name = 'file'
+Results: file 2362 (5,47%), Network activity 29855 (69,26%), Payload installation 6455 (14,97%), Payload delivery 23319 (54,09%), External analysis 2427 (5,63%), Artifacts dropped 4432 (10,28%)

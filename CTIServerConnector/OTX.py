@@ -15,11 +15,13 @@ class OTX(SuperConnector):
 
     def indicators_malwares_relationships_stix2(self,CTIP):
         #db name
-        Stix2Collection = ClientDB.db["CTIPsToStix2"]
+        Stix2Collection = ClientDB.db["OTX_STIX2"]
+        NonStix2Collection=ClientDB.db["OTX_JSON"]
         CTIP_json = json.dumps(CTIP.json(), indent=4, sort_keys=True)
         # parsing the json CTIPs
         CTIP_json_parsed = json.loads(CTIP_json)
         for x in range(len(CTIP_json_parsed['results'])):
+            NonStix2Collection.insert_one(CTIP_json_parsed['results'][x])
             if len(CTIP_json_parsed['results'][x]['malware_families'])==0:
                 is_family=False
                 aliases=""

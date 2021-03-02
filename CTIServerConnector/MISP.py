@@ -14,7 +14,7 @@ class MISP(SuperConnector):
     # MISP get CTIPs
     def api_con(self):
 
-        Stix2Collection = ClientDB.db["CTIPsToStix2"]
+        Stix2Collection = ClientDB.db["MISP_STIX2"]
         # misp instance credentials
         misp_url = 'http://127.0.0.1:80'
         misp_key = 'KAmW8Eur8wkbepUvMA8BMiwkij27uioujgQkATVc'

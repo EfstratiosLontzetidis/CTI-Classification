@@ -1,4 +1,30 @@
-STEP 4 ANALYSIS
+STEP 4 ANALYSIS FOR NON STIX2
+
+4.1 QUALITY EVALUATION CRITERIA
+
+TIMELINESS
+
+Documents count: 1694
+select count(*)
+from MRLOOQUER_JSON
+
+2021 documents count: 1694 (100%)
+select count(*)
+from MRLOOQUER_JSON
+where lastSeen like "%/21-%";
+
+4.2.1 COURSE OF ACTIONS: NONE
+select *
+from MRLOOQUER_JSON
+
+4.2.2 CPE, CVE, CAPEC : NONE
+Contained only CVE fields not cpe or capec
+select *
+from MRLOOQUER_JSON
+where iPv6NumberOfCVE > 0 or iPv4NumberOfCVE > 0
+Results: 95 documents (5,6%) contained related sum of CVE's
+
+STEP 4 ANALYSIS FOR STIX2
 
 4.1 QUALITY EVALUATION CRITERIA
 
@@ -6,11 +32,11 @@ TIMELINESS
 
 CTIPS Count: 1581
 select count(*)
-from CTIPsToStix2;
+from MRLOOQUER_STIX2;
 
 2021 CTIPS: 1581, 100%
 select count(*)
-from CTIPsToStix2
+from MRLOOQUER_STIX2
 where created like '2021%';
 
 COMPLETENESS
@@ -19,18 +45,18 @@ Indicator: 80% of fields based on stix2 indicator sdo,
 contains: type,id,name,pattern,pattern_type,pattern_version,indicator_types,valid_from + custom subcategory,category_type,domain,last_seen,ipv4,ipv4asn,ipv4numberofCVE,ipv4ports,ipv6cve,ipv6,ipv6prefix,ipv6ports,ipv6asn
 missing fields: description,kill_chain_phases
 select *
-from CTIPsToStix2
+from MRLOOQUER_STIX2
 where type = "indicator";
 
 4.2.1 COURSE OF ACTIONS: NONE
 select *
-from CTIPsToStix2
+from MRLOOQUER_STIX2
 where id  like 'course-of-actions%';
 
 4.2.2 CPE, CVE, CAPEC : NONE
 Contained only CVE fields not cpe or capec
 select *
-from CTIPsToStix2
+from MRLOOQUER_STIX2
 where iPv6NumberOfCVE > 0 or iPv4NumberOfCVE > 0
 Results: 94 documents (5,94%) contained related sum of CVE's
 
@@ -39,22 +65,22 @@ STEP 5 CLASSIFICATION
 
 5.1 Contents of Source:
 select distinct(type)
-from CTIPsToStix2
+from MRLOOQUER_STIX2
 Results: Indicator
 
 Percentages of SDO's
 select count(*)
-from CTIPsToStix2
+from MRLOOQUER_STIX2
 where type = "indicator"
 Results: Indicators 1581 (100%)
 
 Search specific SDO
 In place of malware also infrastructure
 select *
-from CTIPsToStix2
+from MRLOOQUER_STIX2
 where type = "indicator"
 
 5.2 Cyber Kill Chain : NONE
 Does not contains cyber kill chain fields
 select *
-from CTIPsToStix2
+from MRLOOQUER_STIX2

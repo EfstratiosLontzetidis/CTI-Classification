@@ -11,6 +11,7 @@ class PULSEDIVE(SuperConnector):
     def __init__(self):
         super().__init__()
 
+
     def threats_to_stix2(self, ctip):
         #parse json
         response_json_parsed = json.loads(ctip)
@@ -135,7 +136,7 @@ class PULSEDIVE(SuperConnector):
         # parse the stix2 object
         CTIP_ioc_parsed = parse(indicator, allow_custom=True)
         #store it in database
-        Stix2Collection = ClientDB.db["CTIPsToStix2"]
+        Stix2Collection = ClientDB.db["PULSEDIVE_STIX2"]
         Stix2Collection.insert_one(stix_to_json(CTIP_ioc_parsed))
         #ioc id for relationship objects
         ioc_id=CTIP_ioc_parsed.id
@@ -163,12 +164,17 @@ class PULSEDIVE(SuperConnector):
 
     # PULSEDIVE get CTIPs
     def api_con(self):
-        #need to automate malwares
+        NonStix2Collection=ClientDB.db["PULSEDIVE_JSON"]
         threat_id_malware_id = {}
         for x in range(300):
             response = requests.get("https://pulsedive.com/api/info.php?tid="+str(x)+"&pretty=1&key=ccb008a66b43702e60bf2606826272f1a18730d718070383bb4beb17b7b6c31b")
             if response.status_code==200:
                 response_json=json.dumps(response.json(), indent=4, sort_keys=True)
+                response_json_parsed = json.loads(response_json)
+                try:
+                    NonStix2Collection.insert_one(response_json_parsed)
+                except Exception:
+                    continue
                 malware_stix2=self.threats_to_stix2(response_json)
                 print(malware_stix2)
                 #parse the stix2 object
@@ -176,7 +182,7 @@ class PULSEDIVE(SuperConnector):
                 #store threat id from pulsedive and malware object id for later in order to make relationships with indicators
                 threat_id_malware_id[x]=CTIP_parsed.id
                 #store it in database
-                Stix2Collection = ClientDB.db["CTIPsToStix2"]
+                Stix2Collection = ClientDB.db["PULSEDIVE_STIX2"]
                 Stix2Collection.insert_one(stix_to_json(CTIP_parsed))
 
         # #indicators by id, if they have threats linked, will be combined to stix2 relationship
@@ -184,4 +190,12 @@ class PULSEDIVE(SuperConnector):
             response2=requests.get("https://pulsedive.com/api/info.php?iid="+str(y)+"&historical=0&schema=1&pretty=1&key=ccb008a66b43702e60bf2606826272f1a18730d718070383bb4beb17b7b6c31b")
             if response2.status_code==200:
                 response2_json = json.dumps(response2.json(), indent=4, sort_keys=True)
+                response2_json_parsed = json.loads(response2_json)
+                try:
+                    NonStix2Collection.insert_one(response2_json_parsed)
+                except Exception:
+                    continue
                 self.indicators_to_stix2(response2_json, threat_id_malware_id)
+
+
+

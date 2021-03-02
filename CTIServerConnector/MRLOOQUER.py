@@ -13,9 +13,17 @@ class MRLOOQUER(SuperConnector):
     def __init__(self):
         super().__init__()
 
+    def mrlooquer_json_ctips(self,response):
+        Stix2Collection = ClientDB.db["MRLOOQUER_JSON"]
+        parsed_CTIP = json.loads(json.dumps(response.json(), indent=4))
+        for x in range(len(parsed_CTIP)):
+            Stix2Collection.insert_one((parsed_CTIP[x]))
+
+
     # MRLOOQUER get CTIPs,csv ,not one by one
     def api_con(self):
         response = requests.get("https://iocfeed.mrlooquer.com/feed.json")
+        self.mrlooquer_json_ctips(response)
         #parse the converted json
         parsed_CTIP=json.loads(json.dumps(response.json(), indent=4))
         for x in range(len(parsed_CTIP)):
@@ -54,7 +62,7 @@ class MRLOOQUER(SuperConnector):
                 # parse the stix2 object
                 CTIP_ioc_parsed = parse(indicator, allow_custom=True)
                 # store it in database
-                Stix2Collection = ClientDB.db["CTIPsToStix2"]
+                Stix2Collection = ClientDB.db["MRLOOQUER_STIX2"]
                 Stix2Collection.insert_one(stix_to_json(CTIP_ioc_parsed))
                 print(indicator)
             except KeyError:

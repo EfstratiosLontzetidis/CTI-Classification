@@ -24,7 +24,7 @@ class OPENCTI(SuperConnector):
         opencti_api_client = OpenCTIApiClient(api_url, api_token)
 
         #get ready database
-        Stix2Collection = ClientDB.db["CTIPsToStix2"]
+        Stix2Collection = ClientDB.db["OPENCTI_STIX2"]
 
 
         # Get malwares in STIX2 and place them in database
