@@ -18,29 +18,62 @@ select count(*)
 from ANOMALI_STIX2
 where created like '2021%';
 
-COMPLETENESS*
+COMPLETENESS
 
-Relationships: 62,5% of fields based on stix2 relationship sro,
-missing  fields: start_time,stop_time,description
-contains: type,id,relationship_type,source_ref,target_ref
+Relationships: 75% of fields based on stix2 relationship sro,
+missing  fields: start_time,stop_time
+contains: type,id,relationship_type,source_ref,target_ref,description + custom external_references,created_by_ref,object_marking_refs
 select *
 from ANOMALI_STIX2
-where id like "relationship%"
+where objects.type = "relationship"
 
 Identities: 50% of fields based on stix2 identity sdo
-contains: type,name,id,identity_class
+contains: type,name,id,identity_class + custom object_marking_refs
 missing: roles,description,sectors,contact_info
 select *
 from ANOMALI_STIX2
-where type = "identity";
+where objects.type = "identity"
 
-Marking Definitions: 41,67% of fields based on stix2 marking definition sco
-contains: type,id,created,definition,definition_type
-missing: spec_version,name,created_by_ref,external_references,object_marking_refs,granual_markings,description
+Course of action: 100% of fields based on stix2 course of action sdo
+contains: type,id,name,description + custom object_marking_refs,created_by_ref,external_references,x_mitre_version
 select *
 from ANOMALI_STIX2
-where type = "marking-definition";
+where objects.type = "course-of-action"
 
+Marking Definition:  66,67% of fields based on stix2 marking definition sco
+contains: type,id,name,spec_version,created_by_ref,created,definition_type,definition
+missing: external_references,object_marking_refs,granular_markings,description
+select *
+from ANOMALI_STIX2
+where objects.type = "marking-definition"
+
+Intrusion Set:  45,45% of fields based on stix2 intrustion set sdo
+contains: type,id,name,description,aliases + custom created_by_ref,object_marking_refs,external_references
+missing: first_seen,last_seen,goals,resource_level,primary_motivation,secondary_motivations
+select *
+from ANOMALI_STIX2
+where objects.type = "intrusion-set"
+
+Tools:  50% of fields based on stix2 tool sdo
+contains: type,id,name,description + custom labels,x_mitre_platforms,x_mitre_aliases,x_mitre_version,external_references,object_marking_refs,created_by_ref
+missing: aliases,tool_types, tool_version,kill_chain_phases
+select *
+from ANOMALI_STIX2
+where objects.type = "tool"
+
+Attack Patterns:  83,33% of fields based on stix2 attack pattern sdo
+contains: name,description,id,type,kill_chain_phases + custom x_mitre_detection,x_mitre_data_sources,x_mitre_contributors,x_mitre_platforms,object_marking_refs,external_references
+missing: aliases
+select *
+from ANOMALI_STIX2
+where objects.type = "attack-pattern"
+
+Malwares: 40% of fields based on stix2 malware sdo
+contains: name,type,id,description +external_references,object_marking_refs,created_by_ref,labels,x_mitre_version,x_mitre_aliases,x_mitre_platforms
+missing: aliases,last_seen,operating_system_refs,architecture_execution_envs,implementation_languages,capabilities,sample_refs,malware_types,kill_chain_phases
+select *
+from ANOMALI_STIX2
+where objects.type = "malware"
 
 4.2.1 COURSE OF ACTIONS:
 select count(*)
@@ -48,13 +81,17 @@ from ANOMALI_STIX2
 where objects.type = "course-of-action";
 Results: 206 (2,55%)
 
-4.2.2 CPE, CVE, CAPEC :*
-Checked cpe,capec also
+4.2.2 CPE, CVE, CAPEC :
+Checked cpe,cve also
 select count(*)
 from ANOMALI_STIX2
-where name like "%cve%"
-Results:
+where objects.external_references.url like "%capec%" or objects.external_references.external_id like "%capec%" or objects.external_references.source_name like "%capec%";
+Results: 87 CTIPs contained CAPEC (1,07%)
 
+select count(*)
+from ANOMALI_STIX2
+where objects.external_references.url like "%cve%" or objects.description like "%cve%" or objects.external_references.description like "%cve%" or objects.external_references.source_name like "%cve%"
+Results: 86 CTIPs contained CVE (1,06%)
 
 STEP 5 CLASSIFICATION
 
@@ -68,7 +105,7 @@ In place of identity also  Tool, Course of action, Intrusion set, Attack pattern
 select count(*)
 from ANOMALI_STIX2
 where objects.type = "identity"
-Results:
+Results: Identity 4 (%), Course of Action 206 (%), Intrusion set 83 (%), Malware 302 (%), Attack pattern 650 (%), Marking definition 4 (%), Relationship 6739 (%), Tool 46 (%),X MITRE MATRIX 1 (%), X MITRE TACTIC 34 (%)
 
 Search specific SDO,SRO
 In place of identity also  Tool, Course of action, Intrusion set, Attack pattern, Relationship, Marking Definition, Malware, X MITRE MATRIX, X MITRE TACTIC
@@ -76,24 +113,20 @@ select *
 from ANOMALI_STIX2
 where type = "identity"
 
-5.2 Cyber Kill Chain :*
-Kill chain phases names
-select distinct(objects.kill_chain_phases.phase_name)
+5.2 Cyber Kill Chain :
+Kill chain phases names,how many per phase name,order desc
+select count(*),objects.kill_chain_phases.phase_name
 from ANOMALI_STIX2
-Results:
+group by objects.kill_chain_phases.phase_name
+order by objects.kill_chain_phases.phase_name desc;
+**78 phase names, output omitted.
 
-How many CTIPs included CKC fields: 43104 (52,18%)
+How many CTIPs included CKC fields: 565 (7%)
 select count(*)
 from ANOMALI_STIX2
-where kill_chain_phases.phase_name in ('file','Network activity','Payload installation','External analysis', 'Artifacts dropped');
+where objects.kill_chain_phases.phase_name like "%%";
 
-Search specific kill chain phase name (in place of network activity could be : file, Payload installation, Payload delivery, External analysis, Artifacts dropped)
+Search specific kill chain phase name (in place of technical-information-gathering could be other 77 names)
 select *
 from ANOMALI_STIX2
-where kill_chain_phases.phase_name = 'Network activity'
-
-Percentages of kill_chain_phases:(in place of network activity could be : Network activity, Payload installation, Payload delivery, External analysis, Artifacts dropped)
-select count(*)
-from ANOMALI_STIX2
-where kill_chain_phases.phase_name = 'file'
-Results: file 2362 (5,47%), Network activity 29855 (69,26%), Payload installation 6455 (14,97%), Payload delivery 23319 (54,09%), External analysis 2427 (5,63%), Artifacts dropped 4432 (10,28%)
+where kill_chain_phases.phase_name = 'technical-information-gathering'
