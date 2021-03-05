@@ -14,7 +14,7 @@ from CTIServerConnector.URLHAUS import URLHAUS
 from CTIServerConnector.MITRE import MITRE
 
 connector = SuperConnector()
-connection_behavior = MITRE()
+connection_behavior = ANOMALI()
 connector.setConnectorBehaviour(connection_behavior)
 
 ctips = connector.getCTIPs()

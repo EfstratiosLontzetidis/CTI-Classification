@@ -1,7 +1,8 @@
-from taxii2client.v20 import Server
+from taxii2client.v21 import Server,Collection
 from serviceDB.mongoDBService import ClientDB
 from Utilities.utility import stix_to_json
-import json, re
+import json, re,requests
+from requests.auth import HTTPBasicAuth
 from stix2 import parse
 from CTIServerConnector.SuperConnector import SuperConnector
 
@@ -10,40 +11,20 @@ class ANOMALI(SuperConnector):
     def __init__(self):
         super().__init__()
 
-    def get_ids(self, collection):
-        ids = re.findall('(?:"id":\s")(.*\d)', str(collection))
-        return ids
-
-
     # Anomali get CTIPs
     def api_con(self):
+        ids={"0":"107","1":"135","2":"136","3":"150","4":"200","5":"209","6":"31","7":"313","8":"33","9":"41","10":"68"}
+        # for x in ids:
+        #     col=Collection("https://limo.anomali.com/api/v1/taxii2/feeds/collection/"+str(ids[str(x)])+"/", user="guest",password="guest")
+        #     col.description
+        #     break
+        col = Collection("https://limo.anomali.com/api/v1/taxii2/feeds/collection/135/",user="guest", password="guest",verify=False)
+        print(col.get_objects())
+        #print("https://limo.anomali.com/api/v1/taxii2/feeds/collection/"+str(ids[str(0)]))
 
-        server = Server("https://cti-taxii.mitre.org/taxii/")
 
-        api_root = server.api_roots[0]
 
-        server = Server("https://limo.anomali.com/api/v1/taxii2/feeds/", user="guest", password="guest")
-        #loop to get collection by collection id
-        for x in range(len(api_root.collections)):
-            print("Starting collection number: "+str(x))
-            collection = api_root.collections[x]
-            #make the collection in json format
-            collection_json= json.dumps(collection.get_objects(), indent=4)
-            #take the collection's ids
-            collection_ids=self.get_ids(collection_json)
-            #loop in order to get CTIPs one by one
-            for id in collection_ids:
-                if "bundle" not in id:
-                    #auto pull CTIP with id taken from the method
-                    try:
-                        CTIP=json.dumps(collection.get_object(obj_id=id),indent=4)
-                        CTIP_parsed=parse(CTIP, allow_custom=True)
-                        Stix2Collection=ClientDB.db["ANOMALI_STIX2"]
-                        Stix2Collection.insert_one(stix_to_json(CTIP_parsed))
-                        print("CTIP with id: "+id+" has successfully been added to the database Stix2")
-                        print("===================================================================================")
-                    except Exception:
-                        pass
+
 
 
 
