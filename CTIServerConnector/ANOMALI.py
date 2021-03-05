@@ -15,7 +15,7 @@ class ANOMALI(SuperConnector):
         return ids
 
 
-    # OpenCTI get CTIPs
+    # Anomali get CTIPs
     def api_con(self):
 
         server = Server("https://cti-taxii.mitre.org/taxii/")

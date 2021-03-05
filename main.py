@@ -11,9 +11,10 @@ from CTIServerConnector.PULSEDIVE import PULSEDIVE
 from CTIServerConnector.SuperConnector import SuperConnector
 from CTIServerConnector.IBM import IBM
 from CTIServerConnector.URLHAUS import URLHAUS
+from CTIServerConnector.MITRE import MITRE
 
 connector = SuperConnector()
-connection_behavior = PULSEDIVE()
+connection_behavior = MITRE()
 connector.setConnectorBehaviour(connection_behavior)
 
 ctips = connector.getCTIPs()
