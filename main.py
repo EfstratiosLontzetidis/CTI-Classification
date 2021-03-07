@@ -13,10 +13,20 @@ from CTIServerConnector.IBM import IBM
 from CTIServerConnector.URLHAUS import URLHAUS
 from CTIServerConnector.MITRE import MITRE
 
-connector = SuperConnector()
-connection_behavior = ANOMALI()
-connector.setConnectorBehaviour(connection_behavior)
+# connector = SuperConnector()
+# connection_behavior = OPENCTI()
+# connector.setConnectorBehaviour(connection_behavior)
+#
+# ctips = connector.getCTIPs()
+# print(ctips)
+import stix2
+from stix2 import FileSystemStore
 
-ctips = connector.getCTIPs()
-#print(ctips)
+fs = FileSystemStore("./filesystemlocalrepository")
+
+# retrieve STIX2 content from FileSystemStore
+mal = fs.get("malware--92ec0cbd-2c30-44a2-b270-73f4ec949841")
+
+# for visual purposes
+print(mal)
 

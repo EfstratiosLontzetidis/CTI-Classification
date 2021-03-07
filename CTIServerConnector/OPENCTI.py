@@ -26,7 +26,7 @@ class OPENCTI(SuperConnector):
 
         # Variables
         api_url = "http://localhost:8080/graphql"
-        api_token = "8f8f45a6-769f-4f52-9848-c7ab1e7daa2b"
+        api_token = "df8635b1-39b5-41c2-8873-2f19b0e6ca8c"
 
         # OpenCTI initialization
         opencti_api_client = OpenCTIApiClient(api_url, api_token)
@@ -39,17 +39,18 @@ class OPENCTI(SuperConnector):
                  "infrastructure", "identity", "course-of-action", "attack-pattern", "sighting", "campaign",
                  "threat-actor", "observed-data", "report"]
         for x in types:
-            try:
-                data = opencti_api_client.stix2.export_list(x)
-                data_json = json.dumps(data, indent=4)
-                data_json_parsed = json.loads(data_json)
-                for y in range(len(data_json_parsed['objects'])):
-                    stix2_data = data_json_parsed['objects'][y]
-                    print(stix2_data)
-                    stix2_data_parsed = parse(stix2_data, allow_custom=True)
-                    Stix2Collection.insert_one(stix_to_json(stix2_data_parsed))
-            except Exception:
-                continue
+            # try:
+            data = opencti_api_client.stix2.export_list(x)
+            data_json = json.dumps(data, indent=4)
+            print(data_json)
+
+            data_json_parsed = json.loads(data_json)
+            for y in range(len(data_json_parsed['objects'])):
+                stix2_data = data_json_parsed['objects'][y]
+                stix2_data_parsed = parse(stix2_data, allow_custom=True)
+                Stix2Collection.insert_one(stix_to_json(stix2_data_parsed))
+            # except Exception:
+            #     continue
 
         # # 2nd way to try
         # try:
