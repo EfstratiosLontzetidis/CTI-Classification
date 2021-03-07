@@ -11,10 +11,18 @@ class OPENCTI(SuperConnector):
     def __init__(self):
         super().__init__()
 
+    def insert_to_db(self, data):
+        Stix2Collection = ClientDB.db["OPENCTI_STIX2"]
+        data_json = json.dumps(data, indent=4)
+        data_json_parsed = json.loads(data_json)
+        for y in range(len(data_json_parsed['objects'])):
+            stix2_data = data_json_parsed['objects'][y]
+            print(stix2_data)
+            stix2_data_parsed = parse(stix2_data, allow_custom=True)
+            Stix2Collection.insert_one(stix_to_json(stix2_data_parsed))
 
     # OpenCTI get CTIPs
     def api_con(self):
-        # not tested yet because of opencti client is slow
 
         # Variables
         api_url = "http://localhost:8080/graphql"
@@ -23,36 +31,64 @@ class OPENCTI(SuperConnector):
         # OpenCTI initialization
         opencti_api_client = OpenCTIApiClient(api_url, api_token)
 
-        #get ready database
+        # get ready database
         Stix2Collection = ClientDB.db["OPENCTI_STIX2"]
 
+        # 1st way to try
+        types = ["malware", "intrusion-set", "marking-definition", "indicator", "relationship", "tool", "vulnerability",
+                 "infrastructure", "identity", "course-of-action", "attack-pattern", "sighting", "campaign",
+                 "threat-actor", "observed-data", "report"]
+        for x in types:
+            try:
+                data = opencti_api_client.stix2.export_list(x)
+                data_json = json.dumps(data, indent=4)
+                data_json_parsed = json.loads(data_json)
+                for y in range(len(data_json_parsed['objects'])):
+                    stix2_data = data_json_parsed['objects'][y]
+                    print(stix2_data)
+                    stix2_data_parsed = parse(stix2_data, allow_custom=True)
+                    Stix2Collection.insert_one(stix_to_json(stix2_data_parsed))
+            except Exception:
+                continue
 
-        # Get malwares in STIX2 and place them in database
-        try:
-            data_malwares = opencti_api_client.stix2.export_list("malware")
-            # Make the data in json format
-            data_malwares_json= json.dumps(data_malwares, indent=4)
-            data_malwares_json_parsed=json.loads(data_malwares_json)
-            for x in range(len(data_malwares_json_parsed['objects'])):
-                malware=data_malwares_json_parsed['objects'][x]
-                print(malware)
-                malware_parsed=parse(malware,allow_custom=True)
-                Stix2Collection.insert_one(stix_to_json(malware_parsed))
-        except Exception:
-            print("OpenCTI Error for malwares")
-
-        # Get reports in STIX2 and place them in database
-        try:
-            data_reports = opencti_api_client.stix2.export_list("report")
-            # Make the data in json format
-            data_reports_json = json.dumps(data_reports, indent=4)
-            data_reports_json_parsed = json.loads(data_reports_json)
-            for x in range(len(data_reports_json_parsed['objects'])):
-                report = data_reports_json_parsed['objects'][x]
-                print(report)
-                report_parsed = parse(report, allow_custom=True)
-                Stix2Collection.insert_one(stix_to_json(report_parsed))
-        except Exception:
-            print("OpenCTI Error for reports")
-
-
+        # # 2nd way to try
+        # try:
+        #     malwares = opencti_api_client.malware.to_stix2()
+        # except Exception:
+        #     print("failed")
+        # try:
+        #     identities = opencti_api_client.identity.to_stix2()
+        # except Exception:
+        #     print("failed")
+        # try:
+        #     report = opencti_api_client.report.to_stix2()
+        # except Exception:
+        #     print("failed")
+        # try:
+        #     indicator = opencti_api_client.indicator.to_stix2()
+        # except Exception:
+        #     print("failed")
+        # try:
+        #     attack_pattern = opencti_api_client.attack_pattern.to_stix2()
+        # except Exception:
+        #     print("failed")
+        # try:
+        #     campaign = opencti_api_client.campaign.to_stix2()
+        # except Exception:
+        #     print("failed")
+        # try:
+        #     course_of_action = opencti_api_client.course_of_action.to_stix2()
+        # except Exception:
+        #     print("failed")
+        # try:
+        #     intrusion_set = opencti_api_client.intrusion_set.to_stix2()
+        # except Exception:
+        #     print("failed")
+        # try:
+        #     tool = opencti_api_client.tool.to_stix2()
+        # except Exception:
+        #     print("failed")
+        # try:
+        #     threat_actor = opencti_api_client.threat_actor.to_stix2()
+        # except Exception:
+        #     print("failed")
