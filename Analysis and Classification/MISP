@@ -112,10 +112,10 @@ select distinct(kill_chain_phases.phase_name)
 from MISP_STIX2
 Results: file, Network activity, Payload installation, Payload delivery, External analysis, Artifacts dropped
 
-How many CTIPs included CKC fields: 43104 (52,18%)
+How many CTIPs included CKC fields: 68850 (83,34%)
 select count(*)
 from MISP_STIX2
-where kill_chain_phases.phase_name in ('file','Network activity','Payload installation','External analysis', 'Artifacts dropped');
+where kill_chain_phases.phase_name in ('file','Network activity','Payload installation','External analysis', 'Artifacts dropped','Payload delivery');
 
 Search specific kill chain phase name (in place of network activity could be : file, Payload installation, Payload delivery, External analysis, Artifacts dropped)
 select *
@@ -126,4 +126,4 @@ Percentages of kill_chain_phases:(in place of network activity could be : Networ
 select count(*)
 from MISP_STIX2
 where kill_chain_phases.phase_name = 'file'
-Results: file 2362 (5,47%), Network activity 29855 (69,26%), Payload installation 6455 (14,97%), Payload delivery 23319 (54,09%), External analysis 2427 (5,63%), Artifacts dropped 4432 (10,28%)
+Results: file 2362 (3,43%), Network activity 29855 (43,36%), Payload installation 6455 (9,37%), Payload delivery 23319 (33,86%), External analysis 2427 (3,52%), Artifacts dropped 4432 (6,43%)
