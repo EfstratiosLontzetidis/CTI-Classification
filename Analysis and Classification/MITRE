@@ -78,8 +78,8 @@ where type = "malware"
 4.2.1 COURSE OF ACTIONS:
 select count(*)
 from MITRE_STIX2
-where type = "course-of-action";
-Results: 330 (2,57%)
+where type="course of action" or source_ref like "course%";
+Results: 1955 (15,24%)
 
 4.2.2 CPE, CVE, CAPEC :
 Checked cpe,capec also
