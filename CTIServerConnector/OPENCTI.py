@@ -37,11 +37,12 @@ class OPENCTI(SuperConnector):
                 for y in range(len(data_json_parsed['objects'])):
                     stix2_data = data_json_parsed['objects'][y]
                     if (stix2_data['external_references']) is not None:
-                        for w in range(len(stix2_data['external_references'])):
-                            del stix2_data['external_references'][w]['id']
-                            del stix2_data['external_references'][w]['x_opencti_id']
-                            del stix2_data['external_references'][w]['x_opencti_created']
-                            del stix2_data['external_references'][w]['x_opencti_modified']
+                        del stix2_data['external_references']
+#                         for w in range(len(stix2_data['external_references'])):
+#                             del stix2_data['external_references'][w]['id']
+#                             del stix2_data['external_references'][w]['x_opencti_id']
+#                             del stix2_data['external_references'][w]['x_opencti_created']
+#                             del stix2_data['external_references'][w]['x_opencti_modified']
                     print(stix2_data)
                     stix2_data_parsed = parse(stix2_data, allow_custom=True)
                     Stix2Collection.insert_one(stix_to_json(stix2_data_parsed))
