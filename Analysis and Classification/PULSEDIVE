@@ -1,0 +1,110 @@
+STEP 4 ANALYSIS FOR NON STIX2
+
+4.1 QUALITY EVALUATION CRITERIA
+
+TIMELINESS
+
+Documents count: 236
+select count(*)
+from PULSEDIVE_JSON
+
+2021 documents count: 0
+2020 documents count: 0
+2019 documents count: 0
+2018 documents count: 95 (40,26%)
+2017 documents count: 141 (59,74%)
+select count(*)
+from PULSEDIVE_JSON
+where stamp_added like "2021%";
+
+4.2.1 COURSE OF ACTIONS: NONE
+select *
+from PULSEDIVE_JSON
+
+4.2.2 CPE, CVE, CAPEC : NONE
+Checked cpe,capec also
+select count(*)
+from PULSEDIVE_JSON
+where news.title like "%cve%" or news.link like "%cve%" or threat like "%cve%";
+Results: 16 documents (6,7%) contained CVE's references from news
+
+STEP 4 ANALYSIS FOR STIX2
+
+4.1 QUALITY EVALUATION CRITERIA
+
+TIMELINESS
+
+CTIPS Count: 466
+select count(*)
+from PULSEDIVE_STIX2;
+
+In place of 2021 was checked also 2020,2019,2018,2017
+2021 CTIPS: 230 (49,35%)
+2020 CTIPS: 0%
+2019 CTIPS: 0%
+2018 CTIPS: 95 (20,38%)
+2017 CTIPS:  141 (30,25%)
+select count(*)
+from PULSEDIVE_STIX2
+where created like '2021%';
+
+COMPLETENESS
+
+Indicator: 70% of fields based on stix2 indicator sdo,
+contains: type,id,name,pattern,pattern_type,pattern_version,valid_from + custom risk,aliases,ports,technologies,hosttype,protocols,properties
+missing fields: description,kill_chain_phases,indicator_types
+select *
+from PULSEDIVE_STIX2
+where type = "indicator";
+
+Relationships: 62,5% of fields based on stix2 relationship sro,
+missing  fields: start_time,stop_time,description
+contains: type,id,relationship_type,source_ref,target_ref
+select *
+from PULSEDIVE_STIX2
+where id like "relationship%"
+
+Malwares: 46,66% of fields based on stix2 malware sdo
+contains: name,description,type,id,aliases,is_family,first_seen, +custom risk,technologies,ports,hosttype,protocols
+missing: last_seen,operating_system_refs,architecture_execution_envs,implementation_languages,capabilities,sample_refs,malware_types,kill_chain_phases
+select *
+from PULSEDIVE_STIX2
+where type = "malware";
+
+4.2.1 COURSE OF ACTIONS: NONE
+select *
+from PULSEDIVE_STIX2
+where id  like 'course-of-actions%';
+
+4.2.2 CPE, CVE, CAPEC : NONE
+Checked cpe,capec also
+select count(*)
+from PULSEDIVE_STIX2
+where properties like "%cve%" or description like "%cve%" or name like "%cve%";
+Results: 1 documents (0,21%) contained named CVE's
+
+
+STEP 5 CLASSIFICATION
+
+5.1 Contents of Source:
+select distinct(type)
+from PULSEDIVE_STIX2
+Results: Indicator, Malware, Relationship
+
+Percentages of SDO's,SRO's
+In place of malware also relationship,malware
+select count(*)
+from PULSEDIVE_STIX2
+where type = "indicator"
+Results: Indicators 87 (18,66%), Malwares 149 (31,97%), Relationships 230 (49,35%)
+
+Search specific SDO,SRO
+In place of indicator also malware,indicator
+select *
+from PULSEDIVE_STIX2
+where type = "indicator"
+
+5.2 Cyber Kill Chain : NONE
+Does not contains cyber kill chain fields
+select *
+from PULSEDIVE_STIX2

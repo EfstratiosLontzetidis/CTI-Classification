@@ -1,0 +1,129 @@
+STEP 4 ANALYSIS
+
+4.1 QUALITY EVALUATION CRITERIA
+
+TIMELINESS
+
+CTIPS Count: 82604
+select count(*)
+from MISP_STIX2;
+
+In place of 2021 was checked also 2020,2019,2018,2017
+2021 CTIPS: 2480 (3%)
+2020 CTIPS: 1612 (1,95%)
+2019 CTIPS: 456 (0,55%)
+2018 CTIPS: 2800 (3,38%)
+2017 CTIPS: 937 (1,13%)
+2016 CTIPS: 8974 (10,86%)
+2015 CTIPS: 47971 (58,07%)
+2014 CTIPS: 17373 (21,03%)
+2013 CTIPS: 1 (0,001%)
+select count(*)
+from MISP_STIX2
+where created like '2021%';
+
+COMPLETENESS
+
+Indicator: 60% of fields based on stix2 indicator sdo,
+contains: type,id,name,pattern,kill_chain_phases,description + custom valid_until,created_by_ref
+missing fields: pattern_type,indicator_types,pattern_version,valid_from
+select *
+from MISP_STIX2
+where type = "indicator";
+
+Relationships: 62,5% of fields based on stix2 relationship sro,
+missing  fields: start_time,stop_time,description
+contains: type,id,relationship_type,source_ref,target_ref
+select *
+from MISP_STIX2
+where id like "relationship%"
+
+Identities: 50% of fields based on stix2 identity sdo
+contains: type,name,id,identity_class
+missing: roles,description,sectors,contact_info
+select *
+from MISP_STIX2
+where type = "identity";
+
+Marking Definitions: 41,67% of fields based on stix2 marking definition sco
+contains: type,id,created,definition,definition_type
+missing: spec_version,name,created_by_ref,external_references,object_marking_refs,granual_markings,description
+select *
+from MISP_STIX2
+where type = "marking-definition";
+
+Observed Data: 85,71% of fields based on stix2 observed data
+contains: type,id,first_observed,last_observed, number_observed,objects + custom created_by_ref,labels
+missing: object_ref
+select *
+from MISP_STIX2
+where type = "observed-data";
+
+Vulnerabilities: 75% of fields based on stix2 vulnerability
+contains: type,id,name + custom labels,created_by_ref,external_references
+missing: description
+select *
+from MISP_STIX2
+where type = "vulnerability";
+
+Reports: 85,71% of fields based on stix2 report sdo
+contains: type,id,description,published,object_refs,name, +custom created_by_ref,object_marking_refs,labels,external_references
+missing: report_type
+select *
+from MISP_STIX2
+where type = "report";
+
+4.2.1 COURSE OF ACTIONS: NONE
+select *
+from MISP_STIX2
+where id  like 'course-of-actions%';
+
+4.2.2 CPE, CVE, CAPEC : NONE
+Checked cpe,capec also
+select count(*)
+from MISP_STIX2
+where name like "%cve%"
+Results: 52 documents (0,06%) contained CVE's
+
+
+STEP 5 CLASSIFICATION
+
+5.1 Contents of Source:
+select distinct(type)
+from MISP_STIX2
+Results: Indicator, Identity, Marking Definition, Relationship, Observed Data, Vulnerability, Report
+
+Percentages of SDO's,SRO's
+In place of indicator also  Identity, Marking Definition, Relationship, Observed Data, Vulnerability, Report
+select count(*)
+from MISP_STIX2
+where type = "indicator"
+Results: Indicators 68850 (83,34%), Identities 13 (0,01%), Relationships 2362 (2,85%), Marking Definitions 269 (0,32%), Observed Data 10924 (13,22%), Vulnerabilities 46 (0,05%), Report 140 (0,16%)
+
+Search specific SDO,SRO
+In place of indicator also  Identity, Marking Definition, Relationship, Observed Data, Vulnerability, Report
+select *
+from MISP_STIX2
+where type = "indicator"
+
+5.2 Cyber Kill Chain :
+Kill chain phases names
+select distinct(kill_chain_phases.phase_name)
+from MISP_STIX2
+Results: file, Network activity, Payload installation, Payload delivery, External analysis, Artifacts dropped
+
+How many CTIPs included CKC fields: 68850 (83,34%)
+select count(*)
+from MISP_STIX2
+where kill_chain_phases.phase_name in ('file','Network activity','Payload installation','External analysis', 'Artifacts dropped','Payload delivery');
+
+Search specific kill chain phase name (in place of network activity could be : file, Payload installation, Payload delivery, External analysis, Artifacts dropped)
+select *
+from MISP_STIX2
+where kill_chain_phases.phase_name = 'Network activity'
+
+Percentages of kill_chain_phases:(in place of network activity could be : Network activity, Payload installation, Payload delivery, External analysis, Artifacts dropped)
+select count(*)
+from MISP_STIX2
+where kill_chain_phases.phase_name = 'file'
+Results: file 2362 (3,43%), Network activity 29855 (43,36%), Payload installation 6455 (9,37%), Payload delivery 23319 (33,86%), External analysis 2427 (3,52%), Artifacts dropped 4432 (6,43%)

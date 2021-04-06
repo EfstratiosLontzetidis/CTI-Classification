@@ -1,0 +1,103 @@
+STEP 4 ANALYSIS FOR NON STIX2 FORMAT
+
+4.1 QUALITY EVALUATION CRITERIA
+
+TIMELINESS
+
+Documents Count: 63
+select count(*)
+from BLUELIV_JSON;
+
+2021 documents count: 63 (100%)
+select count(*)
+from BLUELIV_JSON
+where created_at like "2021%"
+
+4.2.1 COURSE OF ACTIONS: NONE
+select description,tags
+from BLUELIV_JSON
+where id  like 'course-of-actions%';
+
+4.2.2 CPE, CVE, CAPEC
+In place of %cve%, also checked cpe,capec
+select count(*)
+from BLUELIV_JSON
+where description  like '%cve%' or tags like '%cve%' or title like "%cve%";
+Results: 14 documents out of 63 contained CVE's (22,22%)
+
+
+STEP 4 ANALYSIS FOR STIX2 CONVERTION
+
+4.1 QUALITY EVALUATION CRITERIA
+
+TIMELINESS
+
+CTIPS Count: 130
+select count(*)
+from BLUELIV_STIX2;
+
+2021 CTIPS: 130, 100%
+select count(*)
+from BLUELIV_STIX2
+where created like '2021%';
+
+COMPLETENESS
+
+Reports: 100% of fields based on stix2 report sdo
+contains: type,id,description,published,object_refs,report_type,name, +custom tags,tlp
+select *
+from BLUELIV_STIX2
+where id like "report%";
+
+Identities: 37,5% of fields based on stix2 identity sdo,
+missing fields: roles,identity_class,description,sectors,contact_info
+contains: type,name,id
+select *
+from BLUELIV_STIX2
+where id like "identity%";
+
+Relationships: 62,5% of fields based on stix2 relationship sro,
+missing  fields: start_time,stop_time,description
+contains: type,id,relationship_type,source_ref,target_ref
+select *
+from BLUELIV_STIX2
+where id like "relationship%"
+
+4.2.1 COURSE OF ACTIONS: NONE
+select description,tags
+from BLUELIV_STIX2
+where id  like 'course-of-actions%';
+
+4.2.2 CPE, CVE, CAPEC
+In place of %cve%, also checked cpe,capec
+select count(*)
+from BLUELIV_STIX2
+where description  like '%cve%' or tags like '%cve%' or name like "%cve%";
+Results: 14 documents out of 130 contained CVE's (10,76%)
+
+
+STEP 5 CLASSIFICATION
+
+5.1 Contents of Source:
+select distinct(type)
+from BLUELIV_STIX2
+Results: Identity,Report,Relationship
+
+Percentages of SDO's, SRO's
+In place of report can be relationship and identity
+select *
+from BLUELIV_STIX2
+where id like 'report%'
+Results: Identities 4 (3,1%), Relationships 63 (48,45%), Reports 63 (48,45%)
+
+Search specific SDO,SRO
+In place of report can be relationship and identity
+select *
+from BLUELIV_STIX2
+where id like 'report%'
+
+5.2 Cyber Kill Chain : NONE
+Does not contains cyber kill chain fields
+select *
+from BLUELIV_STIX2
+

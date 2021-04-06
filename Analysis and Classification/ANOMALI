@@ -1,0 +1,71 @@
+STEP 4 ANALYSIS
+
+4.1 QUALITY EVALUATION CRITERIA
+
+TIMELINESS
+
+CTIPS Count: 7181
+select count(*)
+from ANOMALI_STIX2;
+
+In place of 2021 was checked also 2020,2019,2018,2017
+2021 CTIPS: 0 (0%)
+2020 CTIPS: 1994 (27,77%)
+2019 CTIPS: 1313 (18,28%)
+2018 CTIPS: 139 (1,93%)
+2017 CTIPS: 456 (6,35%)
+2016 CTIPS: 3279 (45,66%)
+select count(*)
+from ANOMALI_STIX2
+where created like '2021%';
+
+COMPLETENESS
+
+Marking Definition:  41,66% of fields based on stix2 marking definition sco
+contains: type,id,created,definition_type,definition
+missing: name,created_by_ref,external_references,spec_version,object_marking_refs,granular_markings,description
+select *
+from ANOMALI_STIX2
+where type = "marking-definition"
+
+Indicator: 60% of fields based on stix2 indicator sdo,
+contains: type,id,name,pattern,valid_from,description + custom labels,object_marking_refs
+missing fields: kill_chain_phases,pattern_type,indicator_types,pattern_version,
+select *
+from ANOMALI_STIX2
+where type = "indicator";
+
+4.2.1 COURSE OF ACTIONS: NONE
+select *
+from ANOMALI_STIX2
+
+4.2.2 CPE, CVE, CAPEC : NONE
+select count(*)
+from ANOMALI_STIX2
+
+STEP 5 CLASSIFICATION
+
+5.1 Contents of Source:
+select distinct(type)
+from ANOMALI_STIX2;
+Results: Indicator, Marking Definition
+
+Percentages of SDO's,SCO'S
+In place of indicator also Marking Definition
+select count(*)
+from ANOMALI_STIX2
+where type = "indicator"
+Results: Indicator 7170 (99,84%),Marking definition 11 (0,16%)
+
+Search specific SDO,SCO
+In place of indicator also Marking Definition
+select *
+from ANOMALI_STIX2
+where type = "indicator"
+
+5.2 Cyber Kill Chain : NONE
+select *
+from ANOMALI_STIX2
+
+
+

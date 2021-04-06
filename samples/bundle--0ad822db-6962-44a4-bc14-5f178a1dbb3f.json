@@ -1,0 +1,47 @@
+{
+    "type": "bundle",
+    "id": "bundle--0ad822db-6962-44a4-bc14-5f178a1dbb3f",
+    "objects": [
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--a113f287-c09a-4829-a03e-ec298063f52c",
+            "created": "2020-12-17T01:19:31.942166Z",
+            "modified": "2020-12-17T01:19:31.942166Z",
+            "name": "threat--7adca57d-4ff8-448d-a079-68c0e3d32039",
+            "description": "This is a sample indicator used for research in CTI filtering.",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = '223.254.77.211']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2020-06-29T13:49:37.079Z"
+        },
+        {
+            "type": "identity",
+            "spec_version": "2.1",
+            "id": "identity--af5a42b1-b597-48c9-973a-9d847d473972",
+            "created": "2020-12-17T01:19:31.942166Z",
+            "modified": "2020-12-17T01:19:31.942166Z",
+            "name": "Jennie Tigerino",
+            "business_process_context": {
+                "how": "Application\\Custom Application Scheme\\Customer Relationship Management (CRM)",
+                "what": "Industry\\NAICS 2012\\Manufacturing\\Machinery Manufacturing",
+                "where": "Location\\ISO 3166-2\\Armenia",
+                "who": "Role\\Custom Role Scheme\\Integration Layer",
+                "why": "Business Goal\\Custom Goal Scheme\\Synchronize product information"
+            }
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--f5256b04-f993-418d-a6a9-4478a751483b",
+            "created": "2020-12-17T01:19:31.943162Z",
+            "modified": "2020-12-17T01:19:31.943162Z",
+            "relationship_type": "usage-context",
+            "source_ref": "indicator--a113f287-c09a-4829-a03e-ec298063f52c",
+            "target_ref": "identity--af5a42b1-b597-48c9-973a-9d847d473972"
+        }
+    ]
+}
